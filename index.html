@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Xelo Themes</title>
+    <style>
+        /* CSS for the complete black and white dark mode theme */
+        body {
+            background-color: #000;
+            color: #fff;
+            font-family: sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        header {
+            background-color: #000;
+            padding: 20px;
+            text-align: center;
+            border-bottom: 1px solid #333;
+        }
+
+        h1 {
+            margin: 0;
+            font-size: 2.5em;
+        }
+
+        .search-container {
+            margin: 20px auto;
+            text-align: center;
+        }
+
+        #search-bar {
+            width: 80%;
+            max-width: 500px;
+            padding: 10px;
+            border: 1px solid #333;
+            background-color: #111;
+            color: #fff;
+            font-size: 1em;
+            border-radius: 20px;
+        }
+
+        .themes-browser {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 20px;
+            padding: 20px;
+            justify-items: center;
+        }
+
+        .theme-card {
+            background-color: #111;
+            border: 1px solid #333;
+            border-radius: 17px;
+            overflow: hidden;
+            width: 100%;
+            max-width: 300px;
+            max-height: 200px;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        .theme-card:hover {
+            transform: scale(1.05);
+        }
+
+        .theme-preview {
+            background-color: #fff;
+            height: 100px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #000;
+            font-size: 1.2em;
+        }
+
+        .theme-info {
+            padding: 15px;
+        }
+
+        .theme-title {
+            margin: 0 0 10px 0;
+            font-size: 1.2em;
+        }
+
+        .theme-description {
+            font-size: 0.9em;
+            color: #aaa;
+        }
+
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0,0,0,0.8);
+        }
+
+        .modal-content {
+            background-color: #111;
+            margin: 10% auto;
+            padding: 30px;
+            border: 1px solid #333;
+            width: 80%;
+            max-width: 600px;
+            border-radius: 25px;
+            position: relative;
+        }
+
+        .close-button {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+        .close-button:hover,
+        .close-button:focus {
+            color: #fff;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        .modal-header h2 {
+            margin-top: 0;
+        }
+
+        .modal-body .preview-image {
+            width: 100%;
+            height: auto;
+            background-color: #fff;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+
+        .modal-body .details {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 15px;
+            color: #aaa;
+        }
+
+        .modal-footer {
+            text-align: right;
+        }
+
+        .download-button {
+            background-color: #fff;
+            color: #000;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            text-decoration: none;
+            font-size: 1em;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>Xelo Themes</h1>
+    </header>
+   
+    <div class="search-container">
+        <input type="text" id="search-bar" placeholder="Search for themes...">
+    </div>
+
+    <main class="themes-browser" id="themes-browser">
+        <!-- Theme cards will be dynamically inserted here -->
+    </main>
+      <header>
+                <p>want your themes here? submit them in our discord</p>
+      </header>
+    <!-- The Modal -->
+    <div id="theme-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-button">&times;</span>
+            <div class="modal-header">
+                <h2 id="modal-title"></h2>
+            </div>
+            <div class="modal-body">
+                <img id="modal-preview-image" class="preview-image" src="" alt="Theme Preview">
+                <p id="modal-description"></p>
+                <div class="details">
+                    <span>Author: <span id="modal-author"></span></span>
+                    <span>License: <span id="modal-license"></span></span>
+                </div>
+                <a id="modal-website-link" href="#" target="_blank">Visit Website</a>
+            </div>
+            <div class="modal-footer">
+                <a id="modal-download-button" href="#" class="download-button">Download</a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const themesData = [
+            {
+                title: "ass Minimal",
+                description: "a ass theme.",
+                previewText: "Minimal",
+                author: "Your Mom",
+                license: "MIT",
+                previewImage: "https://via.placeholder.com/600x300/ffffff/000000?text=Monochrome+Minimal",
+                website: "#",
+                downloadLink: "#"
+            }
+        ];
+
+        const themesBrowser = document.getElementById('themes-browser');
+        const searchBar = document.getElementById('search-bar');
+        const modal = document.getElementById('theme-modal');
+        const closeButton = document.querySelector('.close-button');
+
+        const displayThemes = (themes) => {
+            themesBrowser.innerHTML = '';
+            themes.forEach((theme, index) => {
+                const themeCard = document.createElement('div');
+                themeCard.classList.add('theme-card');
+                themeCard.dataset.index = index;
+
+                themeCard.innerHTML = `
+                    <div class="theme-preview">
+                        <span>${theme.previewText}</span>
+                    </div>
+                    <div class="theme-info">
+                        <h3 class="theme-title">${theme.title}</h3>
+                        <p class="theme-description">${theme.description.substring(0, 70)}...</p>
+                    </div>
+                `;
+
+                themeCard.addEventListener('click', () => openModal(theme));
+                themesBrowser.appendChild(themeCard);
+            });
+        };
+
+        const openModal = (theme) => {
+            document.getElementById('modal-title').textContent = theme.title;
+            document.getElementById('modal-preview-image').src = theme.previewImage;
+            document.getElementById('modal-description').textContent = theme.description;
+            document.getElementById('modal-author').textContent = theme.author;
+            document.getElementById('modal-license').textContent = theme.license;
+            document.getElementById('modal-website-link').href = theme.website;
+            document.getElementById('modal-download-button').href = theme.downloadLink;
+            modal.style.display = 'block';
+        };
+
+        const closeModal = () => {
+            modal.style.display = 'none';
+        };
+
+        searchBar.addEventListener('keyup', (e) => {
+            const searchString = e.target.value.toLowerCase();
+            const filteredThemes = themesData.filter(theme => {
+                return (
+                    theme.title.toLowerCase().includes(searchString) ||
+                    theme.description.toLowerCase().includes(searchString)
+                );
+            });
+            displayThemes(filteredThemes);
+        });
+
+        closeButton.addEventListener('click', closeModal);
+
+        window.addEventListener('click', (event) => {
+            if (event.target == modal) {
+                closeModal();
+            }
+        });
+
+        // Initial display of all themes
+        displayThemes(themesData);
+    </script>
+
+</body>
+</html>
