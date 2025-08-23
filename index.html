@@ -5,13 +5,147 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Xelo Themes</title>
     <style>
-        /* CSS for the complete black and white dark mode theme */
+        /* CSS for the complete black and white dark mode theme with animations */
+        * {
+            box-sizing: border-box;
+        }
+
         body {
             background-color: #000;
             color: #fff;
             font-family: sans-serif;
             margin: 0;
             padding: 0;
+            overflow-x: hidden;
+            padding-left: 250px;
+            transition: padding-left 0.3s ease;
+        }
+
+        /* Sidebar Styles */
+        .sidebar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 250px;
+            height: 100vh;
+            background-color: #111;
+            border-right: 1px solid #333;
+            z-index: 100;
+            transform: translateX(0);
+            transition: transform 0.3s ease;
+            overflow-y: auto;
+        }
+
+        .sidebar-header {
+            padding: 20px;
+            border-bottom: 1px solid #333;
+            text-align: center;
+        }
+
+        .sidebar-header h2 {
+            margin: 0;
+            font-size: 1.5em;
+            transition: all 0.3s ease;
+            cursor: default;
+        }
+
+        .sidebar-header h2:hover {
+            color: #ccc;
+            transform: scale(1.05);
+        }
+
+        .sidebar-nav {
+            padding: 20px 0;
+        }
+
+        .nav-item {
+            display: block;
+            padding: 15px 25px;
+            color: #aaa;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            border-left: 3px solid transparent;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .nav-item::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .nav-item:hover::before {
+            left: 100%;
+        }
+
+        .nav-item:hover {
+            color: #fff;
+            background-color: #1a1a1a;
+            border-left-color: #fff;
+            transform: translateX(10px);
+        }
+
+        .nav-item.active {
+            color: #fff;
+            background-color: #222;
+            border-left-color: #fff;
+        }
+
+        .nav-item.active::after {
+            content: '';
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 8px;
+            height: 8px;
+            background-color: #fff;
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+
+        .sidebar-toggle {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            z-index: 200;
+            background-color: #111;
+            border: 1px solid #333;
+            color: #fff;
+            padding: 10px;
+            cursor: pointer;
+            border-radius: 5px;
+            transition: all 0.3s ease;
+            display: none;
+        }
+
+        .sidebar-toggle:hover {
+            background-color: #222;
+            transform: scale(1.1);
+        }
+
+        @media (max-width: 768px) {
+            body {
+                padding-left: 0;
+            }
+
+            .sidebar {
+                transform: translateX(-100%);
+            }
+
+            .sidebar.open {
+                transform: translateX(0);
+            }
+
+            .sidebar-toggle {
+                display: block;
+            }
         }
 
         header {
@@ -19,16 +153,47 @@
             padding: 20px;
             text-align: center;
             border-bottom: 1px solid #333;
+            animation: slideDown 0.8s ease-out;
+        }
+
+        @keyframes slideDown {
+            from {
+                transform: translateY(-100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
         }
 
         h1 {
             margin: 0;
             font-size: 2.5em;
+            transition: all 0.3s ease;
+            cursor: default;
+        }
+
+        h1:hover {
+            transform: scale(1.05);
+            text-shadow: 0 0 20px rgba(255, 255, 255, 0.3);
         }
 
         .search-container {
             margin: 20px auto;
             text-align: center;
+            animation: fadeInUp 1s ease-out 0.3s both;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                transform: translateY(30px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
         }
 
         #search-bar {
@@ -40,6 +205,19 @@
             color: #fff;
             font-size: 1em;
             border-radius: 20px;
+            transition: all 0.3s ease;
+            outline: none;
+        }
+
+        #search-bar:focus {
+            border-color: #fff;
+            box-shadow: 0 0 15px rgba(255, 255, 255, 0.2);
+            transform: scale(1.02);
+        }
+
+        #search-bar:hover {
+            border-color: #666;
+            transform: translateY(-2px);
         }
 
         .themes-browser {
@@ -48,6 +226,16 @@
             gap: 20px;
             padding: 20px;
             justify-items: center;
+            animation: fadeIn 1.2s ease-out 0.6s both;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
         }
 
         .theme-card {
@@ -59,11 +247,38 @@
             max-width: 300px;
             max-height: 200px;
             cursor: pointer;
-            transition: transform 0.2s;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            transform: translateY(0);
+            opacity: 0;
+            animation: slideInUp 0.6s ease-out forwards;
+        }
+
+        .theme-card:nth-child(1) { animation-delay: 0.1s; }
+        .theme-card:nth-child(2) { animation-delay: 0.2s; }
+        .theme-card:nth-child(3) { animation-delay: 0.3s; }
+        .theme-card:nth-child(4) { animation-delay: 0.4s; }
+        .theme-card:nth-child(5) { animation-delay: 0.5s; }
+
+        @keyframes slideInUp {
+            from {
+                transform: translateY(50px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
         }
 
         .theme-card:hover {
-            transform: scale(1.05);
+            transform: translateY(-10px) scale(1.03);
+            box-shadow: 0 15px 30px rgba(255, 255, 255, 0.1);
+            border-color: #666;
+        }
+
+        .theme-card:active {
+            transform: translateY(-8px) scale(1.01);
+            transition: all 0.1s ease;
         }
 
         .theme-preview {
@@ -74,32 +289,77 @@
             justify-content: center;
             color: #000;
             font-size: 1.2em;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .theme-preview::before {
+            content: '';
+            position: absolute;
+            top: -100%;
+            left: -100%;
+            width: 300%;
+            height: 300%;
+            background: linear-gradient(45deg, transparent, rgba(0,0,0,0.1), transparent);
+            transition: all 0.6s ease;
+        }
+
+        .theme-card:hover .theme-preview::before {
+            top: -50%;
+            left: -50%;
+        }
+
+        .theme-card:hover .theme-preview {
+            background-color: #f5f5f5;
         }
 
         .theme-info {
             padding: 15px;
+            transition: all 0.3s ease;
+        }
+
+        .theme-card:hover .theme-info {
+            background-color: #1a1a1a;
         }
 
         .theme-title {
             margin: 0 0 10px 0;
             font-size: 1.2em;
+            transition: all 0.3s ease;
+        }
+
+        .theme-card:hover .theme-title {
+            color: #fff;
+            transform: translateX(5px);
         }
 
         .theme-description {
             font-size: 0.9em;
             color: #aaa;
+            transition: all 0.3s ease;
         }
 
-        /* Modal Styles */
+        .theme-card:hover .theme-description {
+            color: #ccc;
+            transform: translateX(5px);
+        }
+
+        /* Modal Styles with Animations */
         .modal {
             display: none;
             position: fixed;
-            z-index: 1;
+            z-index: 1000;
             left: 0;
             top: 0;
             width: 100%;
             height: 100%;
             overflow: auto;
+            background-color: rgba(0,0,0,0);
+            transition: all 0.3s ease;
+        }
+
+        .modal.show {
             background-color: rgba(0,0,0,0.8);
         }
 
@@ -112,24 +372,57 @@
             max-width: 600px;
             border-radius: 25px;
             position: relative;
+            transform: scale(0.7) translateY(-50px);
+            opacity: 0;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .modal.show .modal-content {
+            transform: scale(1) translateY(0);
+            opacity: 1;
         }
 
         .close-button {
             color: #aaa;
-            float: right;
+            position: absolute;
+            top: 15px;
+            right: 20px;
             font-size: 28px;
             font-weight: bold;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            padding: 5px;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1001;
         }
 
         .close-button:hover,
         .close-button:focus {
             color: #fff;
-            text-decoration: none;
-            cursor: pointer;
+            background-color: rgba(255, 255, 255, 0.1);
+            transform: rotate(90deg) scale(1.1);
         }
 
         .modal-header h2 {
             margin-top: 0;
+            margin-right: 60px;
+            animation: slideInLeft 0.5s ease-out 0.2s both;
+        }
+
+        @keyframes slideInLeft {
+            from {
+                transform: translateX(-30px);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
         }
 
         .modal-body .preview-image {
@@ -138,6 +431,24 @@
             background-color: #fff;
             border-radius: 5px;
             margin-bottom: 20px;
+            animation: zoomIn 0.6s ease-out 0.3s both;
+            transition: all 0.3s ease;
+        }
+
+        .modal-body .preview-image:hover {
+            transform: scale(1.02);
+            box-shadow: 0 10px 25px rgba(255, 255, 255, 0.1);
+        }
+
+        @keyframes zoomIn {
+            from {
+                transform: scale(0.8);
+                opacity: 0;
+            }
+            to {
+                transform: scale(1);
+                opacity: 1;
+            }
         }
 
         .modal-body .details {
@@ -145,10 +456,12 @@
             justify-content: space-between;
             margin-bottom: 15px;
             color: #aaa;
+            animation: fadeInUp 0.5s ease-out 0.4s both;
         }
 
         .modal-footer {
             text-align: right;
+            animation: fadeInUp 0.5s ease-out 0.5s both;
         }
 
         .download-button {
@@ -160,25 +473,165 @@
             text-decoration: none;
             font-size: 1em;
             cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-block;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .download-button::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            background-color: #000;
+            border-radius: 50%;
+            transition: all 0.4s ease;
+            transform: translate(-50%, -50%);
+            z-index: -1;
+        }
+
+        .download-button:hover {
+            color: #fff;
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(255, 255, 255, 0.3);
+        }
+
+        .download-button:hover::before {
+            width: 300px;
+            height: 300px;
+        }
+
+        .download-button:active {
+            transform: translateY(-1px);
+        }
+
+        /* Footer animation */
+        header:last-of-type {
+            animation: fadeInUp 1.5s ease-out 1s both;
+        }
+
+        header:last-of-type p {
+            transition: all 0.3s ease;
+            cursor: default;
+        }
+
+        header:last-of-type p:hover {
+            color: #ccc;
+            transform: scale(1.05);
+        }
+
+        /* Smooth scrolling */
+        html {
+            scroll-behavior: smooth;
+        }
+
+        /* Main content area */
+        .main-content {
+            transition: all 0.3s ease;
+        }
+
+        /* Submit Themes Page Styles */
+        .submit-page {
+            display: none;
+            padding: 40px;
+            max-width: 800px;
+            margin: 0 auto;
+            animation: fadeInUp 0.4s ease-out;
+        }
+
+        .submit-page.active {
+            display: block;
+        }
+
+        .themes-page {
+            display: block;
+        }
+
+        .themes-page.hidden {
+            display: none;
+        }
+        .theme-card.loading {
+            animation: pulse 1s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                opacity: 1;
+            }
+            50% {
+                opacity: 0.7;
+            }
+        }
+
+        /* Search results animation */
+        .themes-browser.searching .theme-card {
+            animation: searchFade 0.3s ease-in-out;
+        }
+
+        @keyframes searchFade {
+            0% {
+                opacity: 1;
+                transform: scale(1);
+            }
+            50% {
+                opacity: 0.3;
+                transform: scale(0.95);
+            }
+            100% {
+                opacity: 1;
+                transform: scale(1);
+            }
         }
     </style>
 </head>
 <body>
+    <!-- Sidebar Toggle Button -->
+    <button class="sidebar-toggle" id="sidebar-toggle">☰</button>
 
-    <header>
-        <h1>Xelo Themes</h1>
-    </header>
-   
-    <div class="search-container">
-        <input type="text" id="search-bar" placeholder="Search for themes...">
+    <!-- Sidebar -->
+    <nav class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <h2>Xelo</h2>
+        </div>
+        <div class="sidebar-nav">
+            <a href="#" class="nav-item active" data-page="themes">Themes</a>
+            <a href="#" class="nav-item" data-page="submit">Submit Theme</a>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <!-- Themes Page -->
+        <div class="themes-page" id="themes-page">
+            <header>
+                <h1>Xelo Themes</h1>
+            </header>
+           
+            <div class="search-container">
+                <input type="text" id="search-bar" placeholder="Search for themes...">
+            </div>
+
+            <main class="themes-browser" id="themes-browser">
+                <!-- Theme cards will be dynamically inserted here -->
+            </main>
+            
+            <header>
+                <p>want your themes here? submit them in our discord</p>
+            </header>
+        </div>
+
+        <!-- Submit Theme Page -->
+        <div class="submit-page" id="submit-page">
+            <header>
+                <h1>Submit Your Theme</h1>
+            </header>
+            <p>To Submit a form you'd need to first upload it on our <b>discord themes</b> channel, from there the developers will take a look at it and check for any malware, then upload it on our website</p>
+        </div>
     </div>
 
-    <main class="themes-browser" id="themes-browser">
-        <!-- Theme cards will be dynamically inserted here -->
-    </main>
-      <header>
-                <p>want your themes here? submit them in our discord</p>
-      </header>
     <!-- The Modal -->
     <div id="theme-modal" class="modal">
         <div class="modal-content">
@@ -219,8 +672,64 @@
         const searchBar = document.getElementById('search-bar');
         const modal = document.getElementById('theme-modal');
         const closeButton = document.querySelector('.close-button');
+        const sidebarToggle = document.getElementById('sidebar-toggle');
+        const sidebar = document.getElementById('sidebar');
+        const navItems = document.querySelectorAll('.nav-item');
+        const themesPage = document.getElementById('themes-page');
+        const submitPage = document.getElementById('submit-page');
+        const submitForm = document.getElementById('theme-submit-form');
 
-        const displayThemes = (themes) => {
+        // Navigation functionality
+        navItems.forEach(item => {
+            item.addEventListener('click', (e) => {
+                e.preventDefault();
+                
+                // Update active nav item
+                navItems.forEach(nav => nav.classList.remove('active'));
+                item.classList.add('active');
+                
+                // Switch pages
+                const page = item.dataset.page;
+                if (page === 'themes') {
+                    themesPage.classList.remove('hidden');
+                    submitPage.classList.remove('active');
+                } else if (page === 'submit') {
+                    themesPage.classList.add('hidden');
+                    submitPage.classList.add('active');
+                }
+                
+                // Close sidebar on mobile
+                if (window.innerWidth <= 768) {
+                    sidebar.classList.remove('open');
+                }
+            });
+        });
+
+        // Sidebar toggle for mobile
+        sidebarToggle.addEventListener('click', () => {
+            sidebar.classList.toggle('open');
+        });
+
+        // Close sidebar when clicking outside on mobile
+        document.addEventListener('click', (e) => {
+            if (window.innerWidth <= 768 && 
+                !sidebar.contains(e.target) && 
+                !sidebarToggle.contains(e.target) &&
+                sidebar.classList.contains('open')) {
+                sidebar.classList.remove('open');
+            }
+        });
+
+        // Form submission
+
+        const displayThemes = (themes, animate = false) => {
+            if (animate) {
+                themesBrowser.classList.add('searching');
+                setTimeout(() => {
+                    themesBrowser.classList.remove('searching');
+                }, 300);
+            }
+
             themesBrowser.innerHTML = '';
             themes.forEach((theme, index) => {
                 const themeCard = document.createElement('div');
@@ -250,25 +759,40 @@
             document.getElementById('modal-license').textContent = theme.license;
             document.getElementById('modal-website-link').href = theme.website;
             document.getElementById('modal-download-button').href = theme.downloadLink;
+            
             modal.style.display = 'block';
+            setTimeout(() => {
+                modal.classList.add('show');
+            }, 10);
         };
 
         const closeModal = () => {
-            modal.style.display = 'none';
+            modal.classList.remove('show');
+            setTimeout(() => {
+                modal.style.display = 'none';
+            }, 400);
         };
 
+        let searchTimeout;
         searchBar.addEventListener('keyup', (e) => {
-            const searchString = e.target.value.toLowerCase();
-            const filteredThemes = themesData.filter(theme => {
-                return (
-                    theme.title.toLowerCase().includes(searchString) ||
-                    theme.description.toLowerCase().includes(searchString)
-                );
-            });
-            displayThemes(filteredThemes);
+            clearTimeout(searchTimeout);
+            searchTimeout = setTimeout(() => {
+                const searchString = e.target.value.toLowerCase();
+                const filteredThemes = themesData.filter(theme => {
+                    return (
+                        theme.title.toLowerCase().includes(searchString) ||
+                        theme.description.toLowerCase().includes(searchString)
+                    );
+                });
+                displayThemes(filteredThemes, true);
+            }, 150);
         });
 
-        closeButton.addEventListener('click', closeModal);
+        closeButton.addEventListener('click', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            closeModal();
+        });
 
         window.addEventListener('click', (event) => {
             if (event.target == modal) {
@@ -276,8 +800,25 @@
             }
         });
 
+        // Escape key to close modal
+        document.addEventListener('keydown', (event) => {
+            if (event.key === 'Escape' && modal.classList.contains('show')) {
+                closeModal();
+            }
+        });
+
         // Initial display of all themes
         displayThemes(themesData);
+
+        // Add smooth scrolling behavior
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
     </script>
 
 </body>
